@@ -1,14 +1,29 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
+import MovieCard from './components/MovieCard'
+import axios from 'axios'
+import dummyData from './dummyData'
 
 function App() {
+  const [data, setData] = useState({});
+  // useEffect(() => {
+  //   setData(dummyData)
+  // }, [])
+  useEffect(() => {
+      axios
+        .get('https://api.nasa.gov/planetary/apod?api_key=XIajNSDDfxRL6vGAud2dsKzc1o3ZEEzZNOBvKo5s')
+        .then(res => {
+          console.log(res)
+          setData(res.data)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+      }, [])
   return (
-    <div className="App">
-      <p>
-        Read through the instructions in the README.md file to build your NASA
-        app! Have fun <span role="img" aria-label='go!'>🚀</span>!
-      </p>
-    </div>
+  <div>
+    <MovieCard  image={data.hdurl} title={data.title} explain={data.explanation}/>
+  </div>
   );
 }
 
